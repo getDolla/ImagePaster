@@ -72,8 +72,7 @@ void MainWindow::on_merge_button_clicked()
     ui->textBrowser->append("在把 " + ui->base_label->text() + " 转换为照片 ...");
 
     QProcess process;
-    QString command = "magick -units PixelsPerInch -density 300 \"" + baseFile + "\" -quality 100 \"";
-    command += baseName + ".png\"";
+    QString command = "pdftopng.exe -r 300 \"" + baseFile + "\" \"" + baseName + ".png\"";
 //    cerr << command.toStdString() << endl;
 
     process.setWorkingDirectory(QCoreApplication::applicationDirPath());
@@ -83,7 +82,7 @@ void MainWindow::on_merge_button_clicked()
     QString errors = QString(process.readAllStandardError());
 //    cout << process.readAllStandardOutput().toStdString() << endl;
 
-    if (errors.toLower().contains("invalid")) {
+    if (errors.toLower().contains("invalid") || errors.toLower().contains("unable to open")) {
         ui->textBrowser->append("这个操作有错误:");
         ui->textBrowser->append(errors);
 

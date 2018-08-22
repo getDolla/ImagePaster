@@ -112,7 +112,7 @@ void MainWindow::on_merge_button_clicked()
 
     QString newName = baseFile.split(".").first() + "_NEW.pdf";
     ui->textBrowser->append("在把照片转换为 <b>" + newName + "</b> ...");
-    command = "magick \"" + baseName + "*.png\" \"" + newName + "\"";
+    command = "magick \"" + baseName + "*.png\" -quality 100 -density 300 \"" + newName + "\"";
     process.start(command);
     process.waitForFinished();
 

@@ -72,7 +72,7 @@ void MainWindow::on_merge_button_clicked()
     ui->textBrowser->append("在把 " + ui->base_label->text() + " 转换为照片 ...");
 
     QProcess process;
-    QString command = "magick -density 300 \"" + baseFile + "\" -quality 100 \"";
+    QString command = "magick -units PixelsPerInch -density 300 \"" + baseFile + "\" -quality 100 \"";
     command += baseName + ".png\"";
 //    cerr << command.toStdString() << endl;
 
@@ -103,6 +103,12 @@ void MainWindow::on_merge_button_clicked()
     QDir dir(QCoreApplication::applicationDirPath());
     QFileInfoList files = dir.entryInfoList(filters, QDir::Files|QDir::NoDotAndDotDot);
 
+    if (files.size() < ui->page_end->value()) {
+        ui->textBrowser->append("<b>错误: 页面结束比 " + baseFile + " 页数大！</b>");
+        deletePNG();
+        return;
+    }
+
     ui->textBrowser->append("在改照片 ...");
     for(size_t i = ui->page_start->value() - 1; i < ui->page_end->value(); ++i) {
 //            cerr << files[i].fileName().toStdString() << endl;
@@ -112,7 +118,7 @@ void MainWindow::on_merge_button_clicked()
 
     QString newName = baseFile.split(".").first() + "_NEW.pdf";
     ui->textBrowser->append("在把照片转换为 <b>" + newName + "</b> ...");
-    command = "magick \"" + baseName + "*.png\" -quality 100 -density 300 \"" + newName + "\"";
+    command = "magick \"" + baseName + "*.png\" -units PixelsPerInch -quality 100 -density 300 \"" + newName + "\"";
     process.start(command);
     process.waitForFinished();
 

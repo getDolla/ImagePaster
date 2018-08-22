@@ -32,7 +32,7 @@
    <widget class="QPushButton" name="merge_button">
     <property name="geometry">
      <rect>
-      <x>120</x>
+      <x>110</x>
       <y>160</y>
       <width>151</width>
       <height>31</height>
@@ -222,6 +222,24 @@
     </property>
     <property name="text">
      <string>页面结束:</string>
+    </property>
+   </widget>
+   <widget class="QCheckBox" name="checkBox">
+    <property name="geometry">
+     <rect>
+      <x>270</x>
+      <y>160</y>
+      <width>111</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>9</pointsize>
+     </font>
+    </property>
+    <property name="text">
+     <string>保持改的图像</string>
     </property>
    </widget>
   </widget>

@@ -117,7 +117,10 @@ void MainWindow::on_merge_button_clicked()
     process.waitForFinished();
 
     ui->textBrowser->append("完成。<br>");
-    deletePNG();
+
+    if (!(ui->checkBox->isChecked())) {
+        deletePNG();
+    }
 }
 
 void MainWindow::pasteTo(const QString& baseImage) {

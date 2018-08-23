@@ -55,6 +55,14 @@ void MainWindow::on_paste_image_clicked()
         return;
     }
 
+    overlay = QPixmap(fileName);
+    if (overlay.isNull()) {
+        if (!loadPasteImg(fileName)) {
+            ui->textBrowser->append("<br><b>错误: 无法打开 " + fileName + " 或不支持的格式！</b>");
+            return;
+        }
+    }
+
     pasteImage = fileName;
     ui->paste_label->setText(fileName.split("/").last());
     ui->textBrowser->append("要粘贴的图像: " + fileName);
@@ -92,15 +100,6 @@ void MainWindow::on_merge_button_clicked()
     else if (!errors.isEmpty()) {
         ui->textBrowser->append("<br>这个操作有警告:");
         ui->textBrowser->append(errors);
-    }
-
-    overlay = QPixmap(pasteImage);
-    if (overlay.isNull()) {
-        if (!loadPasteImg()) {
-            ui->textBrowser->append("<br><b>错误: 无法打开要粘贴的图像或不支持的格式！</b>");
-            deletePNG();
-            return;
-        }
     }
 
     QStringList filters;
@@ -149,9 +148,9 @@ void MainWindow::on_merge_button_clicked()
     }
 }
 
-bool MainWindow::loadPasteImg() {
+bool MainWindow::loadPasteImg(const QString& fileName) {
     for (size_t i = 0; i < supportedFormats.size(); ++i) {
-        overlay = QPixmap(pasteImage, supportedFormats[i]);
+        overlay = QPixmap(fileName, supportedFormats[i]);
         if (!overlay.isNull()) {
             return true;
         }

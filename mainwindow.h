@@ -33,7 +33,7 @@ private slots:
     void on_merge_button_clicked();
 
 private:
-    std::vector<char *> supportedFormats = { "PNG", "JPG", "JPEG", "BMP", "PPM", "XBM" };
+    std::vector<const char *> supportedFormats = { "PNG", "JPG", "JPEG", "BMP", "PPM", "XBM" };
 
     Ui::MainWindow *ui;
 
@@ -42,7 +42,7 @@ private:
 
     QPixmap overlay;
 
-    bool loadPasteImg();
+    bool loadPasteImg(const QString& fileName);
     void pasteTo(const QString& baseImage);
     void deletePNG();
 };

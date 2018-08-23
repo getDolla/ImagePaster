@@ -83,14 +83,14 @@ void MainWindow::on_merge_button_clicked()
 //    cout << process.readAllStandardOutput().toStdString() << endl;
 
     if (errors.toLower().contains("invalid") || errors.toLower().contains("unable to open")) {
-        ui->textBrowser->append("这个操作有错误:");
+        ui->textBrowser->append("<br>这个操作有错误:");
         ui->textBrowser->append(errors);
 
         deletePNG();
         return;
     }
     else if (!errors.isEmpty()) {
-        ui->textBrowser->append("这个操作有警告:");
+        ui->textBrowser->append("<br>这个操作有警告:");
         ui->textBrowser->append(errors);
     }
 
@@ -103,12 +103,12 @@ void MainWindow::on_merge_button_clicked()
     QFileInfoList files = dir.entryInfoList(filters, QDir::Files|QDir::NoDotAndDotDot);
 
     if (files.size() < ui->page_end->value()) {
-        ui->textBrowser->append("<b>错误: 页面结束比 " + baseFile + " 页数大！</b>");
+        ui->textBrowser->append("<br><b>错误: 页面结束比 " + baseFile + " 页数大！</b>");
         deletePNG();
         return;
     }
 
-    ui->textBrowser->append("在改照片 ...");
+    ui->textBrowser->append("<br>在改照片 ...");
     for(size_t i = ui->page_start->value() - 1; i < ui->page_end->value(); ++i) {
 //            cerr << files[i].fileName().toStdString() << endl;
         ui->textBrowser->append(files[i].fileName() + " ...");
@@ -116,12 +116,27 @@ void MainWindow::on_merge_button_clicked()
     }
 
     QString newName = baseFile.split(".").first() + "_NEW.pdf";
-    ui->textBrowser->append("在把照片转换为 <b>" + newName + "</b> ...");
+    ui->textBrowser->append("<br>在把照片转换为 <b>" + newName + "</b> ...");
     command = "magick \"" + baseName + "*.png\" -units PixelsPerInch -quality 100 -density 300 \"" + newName + "\"";
     process.start(command);
     process.waitForFinished();
 
-    ui->textBrowser->append("完成。<br>");
+    errors = QString(process.readAllStandardError());
+    //    cout << process.readAllStandardOutput().toStdString() << endl;
+
+    if (errors.toLower().contains("invalid") || errors.toLower().contains("unable to open")) {
+        ui->textBrowser->append("<br>这个操作有错误:");
+        ui->textBrowser->append(errors);
+
+        deletePNG();
+        return;
+    }
+    else if (!errors.isEmpty()) {
+        ui->textBrowser->append("<br>这个操作有警告:");
+        ui->textBrowser->append(errors);
+    }
+
+    ui->textBrowser->append("<br>完成。<br>");
 
     if (!(ui->checkBox->isChecked())) {
         deletePNG();

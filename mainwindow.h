@@ -11,6 +11,8 @@
 #include <QPainter>
 #include <QProcess>
 
+#include <vector>
+
 namespace Ui {
 class MainWindow;
 }
@@ -31,6 +33,8 @@ private slots:
     void on_merge_button_clicked();
 
 private:
+    std::vector<char *> supportedFormats = { "PNG", "JPG", "JPEG", "BMP", "PPM", "XBM" };
+
     Ui::MainWindow *ui;
 
     QString baseFile;
@@ -38,6 +42,7 @@ private:
 
     QPixmap overlay;
 
+    bool loadPasteImg();
     void pasteTo(const QString& baseImage);
     void deletePNG();
 };

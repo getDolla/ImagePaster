@@ -95,7 +95,13 @@ void MainWindow::on_merge_button_clicked()
     }
 
     overlay = QPixmap(pasteImage);
-//    cerr << (overlay.isNull() == true) << endl;
+    if (overlay.isNull()) {
+        if (!loadPasteImg()) {
+            ui->textBrowser->append("<br><b>错误: 无法打开要粘贴的图像或不支持的格式！</b>");
+            deletePNG();
+            return;
+        }
+    }
 
     QStringList filters;
     filters << (baseName + "*.png");
@@ -141,6 +147,16 @@ void MainWindow::on_merge_button_clicked()
     if (!(ui->checkBox->isChecked())) {
         deletePNG();
     }
+}
+
+bool MainWindow::loadPasteImg() {
+    for (size_t i = 0; i < supportedFormats.size(); ++i) {
+        overlay = QPixmap(pasteImage, supportedFormats[i]);
+        if (!overlay.isNull()) {
+            return true;
+        }
+    }
+    return false;
 }
 
 void MainWindow::pasteTo(const QString& baseImage) {

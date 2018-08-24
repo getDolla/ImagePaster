@@ -1,5 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
+#define TIMEOUT 30000
 
 #include <QMainWindow>
 #include <QFileDialog>

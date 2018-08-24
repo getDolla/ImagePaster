@@ -32,7 +32,7 @@ void MainWindow::on_base_image_clicked()
 //    cerr << command.toStdString() << endl;
 
     process.start(command);
-    process.waitForFinished();
+    process.waitForFinished(TIMEOUT/2);
 
     QString output = QString(process.readAllStandardOutput());
 //    cerr << output.toStdString() << endl;
@@ -85,7 +85,7 @@ void MainWindow::on_merge_button_clicked()
 
     process.setWorkingDirectory(QCoreApplication::applicationDirPath());
     process.start(command);
-    process.waitForFinished(30000 * 10);
+    process.waitForFinished(TIMEOUT * 120);
 
     QString errors = QString(process.readAllStandardError());
 //    cout << process.readAllStandardOutput().toStdString() << endl;
@@ -124,7 +124,7 @@ void MainWindow::on_merge_button_clicked()
     ui->textBrowser->append("<br>在把照片转换为 <b>" + newName + "</b> ...");
     command = "magick \"" + baseName + "*.png\" -units PixelsPerInch -quality 100 -density 300 \"" + newName + "\"";
     process.start(command);
-    process.waitForFinished();
+    process.waitForFinished(TIMEOUT * 60);
 
     errors = QString(process.readAllStandardError());
     //    cout << process.readAllStandardOutput().toStdString() << endl;

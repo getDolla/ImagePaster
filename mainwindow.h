@@ -33,6 +33,8 @@ private slots:
 
     void on_merge_button_clicked();
 
+    void on_convert_button_clicked();
+
 private:
     std::vector<const char *> supportedFormats = { "PNG", "JPG", "JPEG", "BMP", "PPM", "XBM" };
 

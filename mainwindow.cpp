@@ -148,6 +148,42 @@ void MainWindow::on_merge_button_clicked()
     }
 }
 
+void MainWindow::on_convert_button_clicked()
+{
+    if (baseFile.isEmpty()) {
+        ui->textBrowser->append("没有要修改的图像！");
+        return;
+    }
+
+    QString baseName = baseFile.split(".").first();
+    ui->textBrowser->append("在把 " + ui->base_label->text() + " 转换为照片 ...");
+
+    QProcess process;
+    QString command = "pdftopng.exe -r 300 -f " + QString::number(ui->page_start->value()) + " -l " + QString::number(ui->page_end->value());
+    command += " \"" + baseFile + "\" \"" + baseName + ".png\"";
+//    cerr << command.toStdString() << endl;
+
+    process.setWorkingDirectory(QCoreApplication::applicationDirPath());
+    process.start(command);
+    process.waitForFinished(TIMEOUT * 120);
+
+    QString errors = QString(process.readAllStandardError());
+//    cout << process.readAllStandardOutput().toStdString() << endl;
+
+    if (errors.toLower().contains("invalid") || errors.toLower().contains("unable to open")) {
+        ui->textBrowser->append("<br>这个操作有错误:");
+        ui->textBrowser->append(errors);
+        return;
+    }
+    else if (!errors.isEmpty()) {
+        ui->textBrowser->append("<br>这个操作有警告:");
+        ui->textBrowser->append(errors);
+    }
+
+    ui->textBrowser->append("<br>图像保存到: <b>" + baseFile.left(baseFile.size() - ui->base_label->text().size()) + "</b><br>");
+}
+
+
 bool MainWindow::loadPasteImg(const QString& fileName) {
     for (size_t i = 0; i < supportedFormats.size(); ++i) {
         overlay = QPixmap(fileName, supportedFormats[i]);
